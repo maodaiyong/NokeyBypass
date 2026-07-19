@@ -1,6 +1,6 @@
 # NokeyBypass
 
-绕过某输入法签名校验、安全检测和皮肤锁的 Xposed 模块。
+绕过某数字钥匙签名校验、安全检测和皮肤锁的 Xposed 模块。
 
 ## Hook 工作原理
 
@@ -27,19 +27,8 @@ Hook 策略按检测方式分三类：
 
 ### 3. 皮肤解锁
 
-输入法的付费皮肤通常通过在线验证或本地校验来控制解锁。Hook 所有与皮肤相关的接口调用，直接赋予解锁状态。
+数字钥匙的付费皮肤通常通过在线验证或本地校验来控制解锁。Hook 所有与皮肤相关的接口调用，直接赋予解锁状态。
 
 - **皮肤数据接口**：Hook 皮肤列表的获取方法，在返回数据里把所有皮肤的 `isLocked`、`isTrial`、`isExpired` 等字段全部设为 `false`。
 - **本地校验绕过**：如果皮肤验证依赖本地签名或 hash 校验，用方法 1 的方式绕过
 - **付费状态接管**：找到皮肤管理类的 `isPurchased()` 或类似方法，直接 Hook 返回 `true`
-
-## 构建
-
-```bash
-export ANDROID_HOME=/root/Android
-GRADLE_OPTS="-Dorg.gradle.daemon=false -Xmx2048m" ./gradlew assembleDebug
-```
-
-APK 输出：`app/build/outputs/apk/debug/app-debug.apk`
-
-ARM64 环境第一次构建前执行 `bash setup_android_env.sh` 替换 aapt2 二进制。
